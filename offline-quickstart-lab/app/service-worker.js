@@ -3,10 +3,10 @@ const cacheName = 'cache-v1';
 const precacheResources = [
   '/',
   'index.html',
-  'styles/main.css',
-  'images/space1.jpg',
-  'images/space2.jpg',
-  'images/space3.jpg'
+//  'styles/main.css',
+//  'images/space1.jpg',
+//  'images/space2.jpg',
+//  'images/space3.jpg'
 ];
 
 self.addEventListener('install', event => {

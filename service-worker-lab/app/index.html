@@ -32,12 +32,13 @@ limitations under the License.
   <a href="other.html">Other page</a>
   <br><br>
   <a href="below/another.html">Another page</a>
+  <button onclick="skipWaiting()">Skip Waiting</button>
   <script>
 
     // Script to register the service worker goes here
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('below/service-worker.js')
+        navigator.serviceWorker.register('/service-worker.js',{scope: '/kitten/'})
           .then(registration => {
             console.log('SW registered with scope:', registration.scope);
           })
@@ -46,8 +47,9 @@ limitations under the License.
           });
       });
     }
-
-
+    function skipWaiting() {
+      self.skipWaiting();
+    }
   </script>
 </body>
 

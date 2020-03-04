@@ -18,28 +18,74 @@ limitations under the License.
 const app = (() => {
 
   function getImageName(country) {
-
+    country = country.toLowerCase();
+    const promiseOfImageName = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (country === 'spain' || country === 'chile' || country === 'peru') {
+          resolve(country + '.png');
+        } else {
+          reject(Error('Didn\'t receive a valid country name!'));
+        }
+      }, 1000);
+    });
+    console.log(promiseOfImageName);
+    return promiseOfImageName;
     // create and return a promise
 
   }
 
   function isSpain(country) {
-
+    country = country.toLowerCase();
+    return new Promise((res, rej) => {
+      if (country === 'spain') {
+        res('ouiiii');
+      } else {
+        rej(Error('ouuuups'));
+      }
+    })
     // Optional - create and return a promise that resolves if input is "Spain"
 
   }
 
   function flagChain(country) {
-
-    // use the promise
-
+    return getImageName(country)
+    .catch(fallbackName)
+    .then(fetchFlag)
+    .then(processFlag)
+    .then(appendFlag)
+    .catch(logError); 
   }
 
-  function allFlags(promiseList) {
+  var promises = [
+    getImageName('Spain'),
+    getImageName('Chile'),
+    getImageName('Peru')
+  ];
 
+  function allFlags(promiseList) {
+    Promise.all([...promiseList]).then(function(values) {
+      console.log(values);
+      return values
+    });
     // use promise.all
 
   }
+
+  allFlags(promises)
+
+
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, 'one');
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(reject, 100, 'two');
+});
+
+Promise.race([promise1, promise2])
+.then(logSuccess)
+.catch(logError);
+
 
 
   // call the allFlags function
@@ -63,10 +109,13 @@ const app = (() => {
   }
 
   function fetchFlag(imageName) {
+    console.log('imageName',imageName)
     return fetch('flags/' + imageName); // fetch returns a promise
   }
 
   function processFlag(flagResponse) {
+    console.log('flagResponse.ok',flagResponse.ok)
+    console.log('flagResponse',flagResponse)
     if (!flagResponse.ok) {
       throw Error('Bad response for flag request!'); // This will implicitly reject
     }
@@ -74,6 +123,7 @@ const app = (() => {
   }
 
   function appendFlag(flagBlob) {
+    console.log('flagBlob',flagBlob);
     const flagImage = document.createElement('img');
     const flagDataURL = URL.createObjectURL(flagBlob);
     flagImage.src = flagDataURL;
